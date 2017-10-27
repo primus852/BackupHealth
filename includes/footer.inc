@@ -6,8 +6,14 @@
 <script type="text/javascript" src="/node_modules/moment/min/moment-with-locales.min.js"></script>
 <script type="text/javascript" src="/node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
 <script type="text/javascript" src="/assets/js/hashchange.min.js"></script>
-<script type="text/javascript" src="/assets/js/app.min.js"></script>
+<script type="text/javascript" src="/assets/js/app.js"></script>
 
 
 </body>
 </html>
+<?php
+
+/* Close DB Connection */
+$bh->close_connection();
+
+?>

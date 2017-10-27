@@ -44,6 +44,9 @@ $(function () {
     /* ------- Init Hashwatcher ------- */
     detectHash();
 
+    /* Trigger all manual Buttons ? */
+    triggerAllManual();
+
 
 });
 
@@ -103,6 +106,16 @@ function initOverlays() {
     });
 }
 
+function triggerAllManual() {
+
+    var $loadStart = $('.loadStart');
+    if($loadStart.length){
+        $loadStart.each(function(){
+            $(this).trigger('click');
+        })
+    }
+
+}
 function detectHash() {
 
     var hash = window.location.hash;
@@ -162,7 +175,7 @@ $(document).on('click', '.removeFromList', function (e) {
                             if (typeof data.extra.action !== 'undefined' && data.extra.action === 'remove') {
                                 $('#row_' + data.extra.id).remove();
                             }
-                        }else{
+                        } else {
                             openNoty(data.result, data.message);
                         }
                         n.close();
@@ -292,9 +305,8 @@ $(document).on('click', '#updateEntry', function (e) {
 
                 /* Append values to Row */
                 $.each(data.extra.fields, function (i, v) {
-                    $('#field_'+v.field+'_'+data.extra.id).html(v.value);
+                    $('#field_' + v.field + '_' + data.extra.id).html(v.value);
                 });
-
 
 
             }
@@ -307,6 +319,40 @@ $(document).on('click', '#updateEntry', function (e) {
         }
     });
 
+
+});
+
+$(document).on('click', '.loadStart', function (e) {
+
+    e.preventDefault();
+
+    var $btn = $(this);
+    var $id = $btn.attr('data-id');
+    var $endpoint = $btn.attr('data-endpoint');
+    var $action = $btn.attr('data-action');
+    $('.result-'+$action+'-' + $id).html('<i class="fa fa-spin fa-spinner"></i>');
+
+    $.ajax({
+        type: "GET",
+        url: $btn.attr('href'),
+        data: {
+            endpoint: $endpoint,
+            id: $id
+        },
+        success: function (data) {
+            if (data.result === 'success') {
+                if (typeof data.extra !== 'undefined') {
+                    $('.result-'+$action+'-' + data.extra.id).html('<span class="' + data.extra.classes + '">' + data.extra.ping + '</span>');
+
+                }
+            }else{
+                openNoty(data.result, data.message);
+            }
+        },
+        fail: function (err) {
+            openNoty('error', 'Error executing update!');
+        }
+    });
 
 });
 
@@ -360,6 +406,12 @@ function addEntry(btn) {
 
                 $btn.addClass('disabled').html('<i class="fa fa-spin fa-spinner"></i>');
 
+                var $special = null;
+                var $trigger = $('.trigger-special');
+                if ($trigger.length) {
+                    $special = $trigger.attr('data-action');
+                }
+
                 var sendData = [];
                 $('.sendValue').each(function (i, v) {
                     var dataName = $(v).attr('data-name');
@@ -383,7 +435,8 @@ function addEntry(btn) {
                     data: {
                         values: sendData,
                         endpoint: btn.attr('data-endpoint'),
-                        table: btn.attr('data-table')
+                        table: btn.attr('data-table'),
+                        special: $special
                     },
                     success: function (data) {
                         openNoty(data.result, data.message);
@@ -401,8 +454,8 @@ function addEntry(btn) {
 
                             /* Append values to Row */
                             $.each(data.extra.fields, function (i, v) {
-
-                                if(v.field !== 'project_id') {
+                                console.log(v.field);
+                                if (v.field !== 'project_id') {
 
                                     if (v.type === 'password') {
                                         $row.append('<td>***</td>');
@@ -422,9 +475,10 @@ function addEntry(btn) {
                             $row.append('<td>&nbsp;</td>');
 
                             $tBody.append($row);
+
+                            n.close();
                         }
 
-                        n.close();
                     },
                     fail: function (err) {
                         openNoty('error', 'failed to save entry, please try again!');

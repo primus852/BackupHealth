@@ -72,6 +72,8 @@
         value="<?php echo isset($id) ? $id : '';?>"
         data-col="<?php echo $sc->encrypt('project_id') ;?>"
 />
+<!-- trigger to check mysql connection before save -->
+<span class="trigger-special" data-action="mysql_connection"></span>
 <div class="row">
     <div class="col-4">
         <span style="font-style: italic;">*optional</span>

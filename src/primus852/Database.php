@@ -15,7 +15,7 @@ class Database
      * Database constructor.
      * @param bool $connect
      */
-    public function __construct(bool $connect = true)
+    public function __construct($connect = true)
     {
 
         /* Default Values */
@@ -34,7 +34,7 @@ class Database
     {
 
         try {
-            $this->sql = new \PDO('mysql:dbname=' . Config::DB_TABLE . ';host=' . Config::DB_HOST . ':' . Config::DB_PORT, Config::DB_USER, Config::DB_PASS);
+            $this->sql = new \PDO('mysql:dbname=' . Config::DB_DATABASE . ';host=' . Config::DB_HOST . ':' . Config::DB_PORT, Config::DB_USER, Config::DB_PASS);
             $this->sql->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
             return new JsonResponse(array(
@@ -54,11 +54,12 @@ class Database
 
     }
 
+
     /**
      * @param bool $active
-     * @return \primus852\JsonResponse|array|null
+     * @return mixed|JsonResponse
      */
-    public function list_projects(bool $active = true)
+    public function list_projects($active = true)
     {
 
         if (!$this->connected) {
@@ -70,7 +71,7 @@ class Database
         }
 
         $result = $this->query_result(
-            'SELECT * FROM ' . Config::DB_TABLE . '.app_projects WHERE is_active = :active',
+            'SELECT * FROM ' . Config::DB_DATABASE . '.app_projects WHERE is_active = :active',
             array(
                 ':active' => $active,
             )
@@ -104,11 +105,11 @@ class Database
      * @param int $id
      * @return mixed
      */
-    public function query_by_id(string $table, int $id)
+    public function query_by_id($table, $id)
     {
 
         /* Create the query */
-        $stmt = $this->sql->prepare('SELECT * FROM ' . Config::DB_TABLE . '.' . $table . ' WHERE id = :id', array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
+        $stmt = $this->sql->prepare('SELECT * FROM ' . Config::DB_DATABASE . '.' . $table . ' WHERE id = :id', array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
 
         /* Execute the query */
         $stmt->execute(array(
@@ -124,11 +125,11 @@ class Database
      * @param int $project_id
      * @return mixed
      */
-    public function get_project_mysql(int $project_id)
+    public function get_project_foreign_table($project_id, $table)
     {
 
         /* Create the query */
-        $stmt = $this->sql->prepare('SELECT * FROM ' . Config::DB_TABLE . '.projects_mysql WHERE project_id = :project_id', array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
+        $stmt = $this->sql->prepare('SELECT * FROM ' . Config::DB_DATABASE . '.projects_'.$table.' WHERE project_id = :project_id', array(\PDO::ATTR_CURSOR => \PDO::CURSOR_FWDONLY));
 
         /* Execute the query */
         $stmt->execute(array(
@@ -146,7 +147,7 @@ class Database
      * @param string $db_table
      * @return string
      */
-    public function display_table(array $data, array $headings, string $db_table)
+    public function display_table(array $data, array $headings, $db_table)
     {
 
         /* Create SimpleCrypt Instance */
@@ -252,7 +253,7 @@ class Database
 
     }
 
-    public function update_list_entry(array $values, int $id, string $table)
+    public function update_list_entry(array $values, $id, $table)
     {
 
         /* Check if required keys exist */
@@ -306,7 +307,7 @@ class Database
             );
         }
 
-        $sql = "UPDATE " . Config::DB_TABLE . "." . $table . " SET " . substr($updateString, 0, -1) . " WHERE id = :id;";
+        $sql = "UPDATE " . Config::DB_DATABASE . "." . $table . " SET " . substr($updateString, 0, -1) . " WHERE id = :id;";
 
         /* Create the query */
         $stmt = $this->sql->prepare($sql);
@@ -340,7 +341,7 @@ class Database
      * @param string $table
      * @return JsonResponse
      */
-    public function add_list_entry(array $values, string $table)
+    public function add_list_entry(array $values, $table, $special)
     {
 
         /* Check if required keys exist */
@@ -361,6 +362,7 @@ class Database
         $valuesString = null;
         $valuesArray = array();
         $fields = array();
+        $dbArray = null;
         foreach ($values as $value) {
 
             /* check if the field is required */
@@ -383,12 +385,31 @@ class Database
             $valuesArray[':' . $sc->decrypt($value['col'])] = $val;
             $fields[] = array(
                 'value' => $val,
-                'field' => $value['col'],
+                'field' => $sc->decrypt($value['col']),
                 'type' => $value['type'],
             );
+
+            /* Fill $dbArray if special === 'mysql_connection* */
+            if($special === 'mysql_connection'){
+                if($value['type'] === 'password'){
+                    $dbArray[$sc->decrypt($value['col'])] = $sc->decrypt($val);
+                }else{
+                    $dbArray[$sc->decrypt($value['col'])] = $val;
+                }
+
+            }
         }
 
-        $sql = "INSERT INTO " . Config::DB_TABLE . "." . $table . " (" . substr($fieldsString, 0, -1) . ") VALUES (" . substr($valuesString, 0, -1) . ");";
+        /* Do Special Action before insert */
+        switch($special){
+            case 'mysql_connection':
+                if($this->test_db_connection($dbArray) !== true){
+                    die;
+                }
+                break;
+        }
+
+        $sql = "INSERT INTO " . Config::DB_DATABASE . "." . $table . " (" . substr($fieldsString, 0, -1) . ") VALUES (" . substr($valuesString, 0, -1) . ");";
 
         /* Create the query */
         $stmt = $this->sql->prepare($sql);
@@ -422,6 +443,57 @@ class Database
     }
 
     /**
+     * @param $dbArray
+     * @return bool|JsonResponse
+     */
+    private function test_db_connection($dbArray){
+
+        if(!array_key_exists('db',$dbArray)){
+            return new JsonResponse(array(
+                'result' => 'error',
+                'message' => 'Could not find \'database\'',
+            ));
+        }
+
+        if(!array_key_exists('hostname',$dbArray)){
+            return new JsonResponse(array(
+                'result' => 'error',
+                'message' => 'Could not find \'hostname\'',
+            ));
+        }
+
+        if(!array_key_exists('port',$dbArray)){
+            return new JsonResponse(array(
+                'result' => 'error',
+                'message' => 'Could not find \'port\'',
+            ));
+        }
+
+        if(!array_key_exists('username',$dbArray)){
+            return new JsonResponse(array(
+                'result' => 'error',
+                'message' => 'Could not find \'username\'',
+            ));
+        }
+
+        try {
+            $conn = new \PDO('mysql:dbname=' . $dbArray['db'] . ';host=' . $dbArray['hostname'] . ':' . $dbArray['port'], $dbArray['username'], $dbArray['pass']);
+            $conn->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+        } catch (\PDOException $e) {
+            return new JsonResponse(array(
+                'result' => 'error',
+                'message' => 'Could not connect to Database',
+                'extra' => array(
+                    'type' => 'mysql_error',
+                    'message' => $e->getMessage(),
+                )
+            ));
+        }
+
+        return true;
+    }
+
+    /**
      * @param array $values
      * @return JsonResponse
      */
@@ -451,7 +523,7 @@ class Database
         $table = $sc->decrypt($values['table']);
 
         /* Create the query */
-        $stmt = $this->sql->prepare('DELETE FROM ' . Config::DB_TABLE . '.' . $table . ' WHERE id = :id');
+        $stmt = $this->sql->prepare('DELETE FROM ' . Config::DB_DATABASE . '.' . $table . ' WHERE id = :id');
 
         /* Execute the query */
         $stmt->execute(array(':id' => $values['id']));

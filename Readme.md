@@ -13,4 +13,14 @@ PoC for the project. Let's see where this is going.
 - Clone the repo
 - run `composer update`
 - run `npm install`
+- Create Database with `setup/setup.sql`
 - Profit
+
+**ToDo / Wishlist**
+
+- check db connection after (before?) adding it
+- make MySQL entries editable
+- add a `ping` Test
+- (Customizable) MySQL Benchmark Tests
+- Backup MySQL
+- Backup (S)FTP folders

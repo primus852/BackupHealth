@@ -2,10 +2,12 @@
 
 namespace primus852;
 
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
 class Config
 {
-
     /* ---- MySQL ---- */
     /* -- Host -- */
     const DB_HOST = "mysql";
@@ -20,10 +22,16 @@ class Config
     const DB_PASS = "docker";
 
     /* -- Table -- */
-    const DB_TABLE = "project";
+    const DB_DATABASE = "project";
 
     /* ---- SimpleCrypt ---- */
     const SC_KEY = 'changeme';
     const SC_IV = 'metoo';
+
+    /* ---- Ping Command ---- */
+    const PING_REPEAT = 3;
+    const PING_TIMEOUT = 5000; //in ms
+    const PING_GOOD_BELOW = 50; //green below X ms
+    const PING_AVG_MAX = 120; //yellow up to X ms
 
 }

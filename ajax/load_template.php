@@ -7,10 +7,6 @@ use primus852\JsonResponse;
 use primus852\SimpleCrypt;
 use primus852\Config;
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
 $request = $_REQUEST;
 
 if (!$template = $request['template']) {
@@ -34,6 +30,12 @@ switch ($template) {
         );
         break;
     case 'add_mysql':
+        $params = array(
+            'sc' => new SimpleCrypt(),
+            'id' => $request['id'],
+        );
+        break;
+    case 'add_ping':
         $params = array(
             'sc' => new SimpleCrypt(),
             'id' => $request['id'],

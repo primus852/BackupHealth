@@ -15,9 +15,9 @@ $projects = $bh->list_projects();
 /* Close DB Connection */
 $bh->close_connection();
 
-?>
+require_once 'includes/header.inc';
 
-<?php require_once 'includes/header.inc'; ?>
+?>
 
     <!-- Slide in Window -->
     <main id="main">

@@ -4,6 +4,7 @@ require_once '../vendor/autoload.php';
 
 use primus852\JsonResponse;
 use primus852\Database;
+use primus852\BackupHealth;
 
 $request = $_REQUEST;
 
@@ -25,11 +26,19 @@ switch ($endpoint) {
         break;
     case 'addEntry':
         $db = new Database();
-        $result = $db->add_list_entry($request['values'], $request['table']);
+        $result = $db->add_list_entry($request['values'], $request['table'], $request['special']);
         break;
     case 'updateEntry':
         $db = new Database();
         $result = $db->update_list_entry($request['values'], $request['id'], $request['table']);
+        break;
+    case 'pingSite':
+        $bh = new BackupHealth();
+        $bh->ping_site($request['id']);
+        break;
+    case 'pingMySql':
+        $bh = new BackupHealth();
+        $bh->mysql_status($request['id']);
         break;
     default:
         return new JsonResponse(array(

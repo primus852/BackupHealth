@@ -19,3 +19,13 @@ CREATE TABLE projects_mysql
   project_id INT,
   CONSTRAINT projects_mysql_app_projects_id_fk FOREIGN KEY (project_id) REFERENCES app_projects (id)
 );
+
+CREATE TABLE projects_ping
+(
+  id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  url VARCHAR(200) NOT NULL,
+  description VARCHAR(200),
+  port INT DEFAULT 80,
+  project_id INT,
+  CONSTRAINT projects_ping_app_projects_id_fk FOREIGN KEY (project_id) REFERENCES app_projects (id)
+);
