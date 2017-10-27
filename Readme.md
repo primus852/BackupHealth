@@ -11,5 +11,6 @@ PoC for the project. Let's see where this is going.
 **Install**
 
 - Clone the repo
-- run `npm install` to install all dependencies.
+- run `composer update`
+- run `npm install`
 - Profit
