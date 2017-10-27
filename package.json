@@ -1,0 +1,26 @@
+{
+  "name": "backuphealth",
+  "version": "1.0.0",
+  "description": "Backups from (S)FTP folders and MySQL Databases as well as status messages of your projects",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "Backup",
+    "Health",
+    "Systemcheck"
+  ],
+  "author": "Torsten Wolter <findnibbler@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "animate.css": "^3.5.2",
+    "bootstrap": "^4.0.0-beta.2",
+    "font-awesome": "^4.7.0",
+    "jquery": "^3.2.1",
+    "moment": "^2.19.1",
+    "noty": "^3.1.3",
+    "perfect-scrollbar": "^1.1.0",
+    "popper.js": "^1.12.6"
+  }
+}

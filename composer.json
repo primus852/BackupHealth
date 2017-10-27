@@ -1,0 +1,21 @@
+{
+  "name": "primus852/backuphealth",
+  "description": "Backups from (S)FTP folders and MySQL Databases as well as status messages of your projects",
+  "type": "project",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Torsten Wolter",
+      "email": "findnibbler@gmail.com"
+    }
+  ],
+  "require": {},
+  "autoload": {
+    "psr-4": {
+      "primus852\\": "src/"
+    },
+    "classmap": [
+      "src/"
+    ]
+  }
+}
