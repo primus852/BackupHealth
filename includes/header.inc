@@ -17,9 +17,10 @@
     <link rel="stylesheet" type="text/css" href="/node_modules/animate.css/animate.min.css">
     <link rel="stylesheet" type="text/css" href="/node_modules/perfect-scrollbar/css/perfect-scrollbar.css">
     <link rel="stylesheet" type="text/css" href="/node_modules/noty/lib/noty.css">
+    <link rel="stylesheet" type="text/css" href="/node_modules/tooltipster/dist/css/tooltipster.bundle.min.css">
 
     <!-- OWN CSS -->
-    <link rel="stylesheet" type="text/css" href="/assets/css/style.min.css">
+    <link rel="stylesheet" type="text/css" href="/assets/css/style.css">
     <link rel="stylesheet" type="text/css" href="/assets/css/overrides.min.css">
 
 </head>

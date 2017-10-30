@@ -37,6 +37,8 @@ $(function () {
     }
     $curMenu.addClass('active');
 
+    /* ------- Init Tooltips ------- */
+    initTooltips('.tt');
 
     /* ------- Sidebar & MainWindow ------- */
     initOverlays();
@@ -111,7 +113,7 @@ function triggerAllManual() {
     var $loadStart = $('.loadStart');
     if($loadStart.length){
         $loadStart.each(function(){
-            $(this).trigger('click');
+            loadStart($(this));
         })
     }
 
@@ -322,11 +324,8 @@ $(document).on('click', '#updateEntry', function (e) {
 
 });
 
-$(document).on('click', '.loadStart', function (e) {
+function loadStart($btn){
 
-    e.preventDefault();
-
-    var $btn = $(this);
     var $id = $btn.attr('data-id');
     var $endpoint = $btn.attr('data-endpoint');
     var $action = $btn.attr('data-action');
@@ -334,7 +333,7 @@ $(document).on('click', '.loadStart', function (e) {
 
     $.ajax({
         type: "GET",
-        url: $btn.attr('href'),
+        url: '/ajax/requests.php',
         data: {
             endpoint: $endpoint,
             id: $id
@@ -342,8 +341,10 @@ $(document).on('click', '.loadStart', function (e) {
         success: function (data) {
             if (data.result === 'success') {
                 if (typeof data.extra !== 'undefined') {
-                    $('.result-'+$action+'-' + data.extra.id).html('<span class="' + data.extra.classes + '">' + data.extra.ping + '</span>');
-
+                    $('.result-'+$action+'-' + data.extra.id).html('<span class="' + data.extra.classes + '">' + data.extra.result + '</span>');
+                    if($action === 'mysql-connect'){
+                        $('.result-mysql-version-'+data.extra.id).html(data.extra.version);
+                    }
                 }
             }else{
                 openNoty(data.result, data.message);
@@ -354,7 +355,8 @@ $(document).on('click', '.loadStart', function (e) {
         }
     });
 
-});
+}
+
 
 $(document).on('click', '#addEntry', function (e) {
 
@@ -564,4 +566,11 @@ function checkTime(i) {
         i = "0" + i
     }
     return i;
+}
+
+function initTooltips(selector) {
+    $(selector).tooltipster({
+        theme: 'tooltipster-punk',
+        contentAsHTML: true
+    });
 }

@@ -5,6 +5,7 @@
 <script type="text/javascript" src="/node_modules/noty/lib/noty.min.js"></script>
 <script type="text/javascript" src="/node_modules/moment/min/moment-with-locales.min.js"></script>
 <script type="text/javascript" src="/node_modules/perfect-scrollbar/dist/perfect-scrollbar.min.js"></script>
+<script type="text/javascript" src="/node_modules/tooltipster/dist/js/tooltipster.bundle.min.js"></script>
 <script type="text/javascript" src="/assets/js/hashchange.min.js"></script>
 <script type="text/javascript" src="/assets/js/app.js"></script>
 

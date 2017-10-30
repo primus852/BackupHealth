@@ -29,3 +29,14 @@ CREATE TABLE projects_ping
   project_id INT,
   CONSTRAINT projects_ping_app_projects_id_fk FOREIGN KEY (project_id) REFERENCES app_projects (id)
 );
+
+CREATE TABLE projects_sftp
+(
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  url VARCHAR(200) NOT NULL,
+  port INT NOT NULL,
+  type ENUM('sftp', 'ftp') NOT NULL,
+  description VARCHAR(200),
+  project_id INT,
+  CONSTRAINT projects_sftp_app_projects_id_fk FOREIGN KEY (project_id) REFERENCES app_projects (id)
+);

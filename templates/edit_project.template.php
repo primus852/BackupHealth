@@ -183,6 +183,61 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-6">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="row">
+                                            <div class="col-6">
+                                                (S)FTP Backup
+                                            </div>
+                                            <div class="col-6 text-right">
+                                                <a class="btn btn-success btn-sm" id="addEntry" href="#"
+                                                   data-url="/ajax/load_template.php"
+                                                   data-template="add_sftp"
+                                                   data-tbody-id="projects_sftp"
+                                                   data-endpoint="addEntry"
+                                                   data-id="<?php echo isset($data['id']) ? $data['id'] : ''; ?>"
+                                                   data-add-heading="Add SFTP credentials to <?php echo isset($data['name']) ? $data['name'] : ''; ?>"
+                                                   data-table="<?php echo $sc->encrypt('projects_sftp'); ?>"
+                                                >
+                                                    <i class="fa fa-plus"></i> Add
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <?php
+
+                                                if (!empty($data)) {
+                                                    echo $bh->display_table(
+                                                        $bh->get_project_foreign_table($data['id'], 'sftp'),
+                                                        array(
+                                                            'id' => '#',
+                                                            'url' => 'URL / IP',
+                                                            'port' => 'Port',
+                                                            'type' => 'Typ',
+                                                            'description' => 'Description',
+                                                            'Action' => array(
+                                                                array(
+                                                                    'classes' => 'btn-danger removeFromList',
+                                                                    'icon' => 'remove',
+                                                                    'text' => 'Delete',
+                                                                    'endpoint' => 'removeById',
+                                                                    'template' => null,
+                                                                    'hash' => null,
+                                                                    'action' => 'message'
+                                                                )
+                                                            ),
+                                                        ), 'projects_sftp');
+                                                }
+                                                ?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     <?php } else { ?>
                         <div class="row">

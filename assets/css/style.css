@@ -1199,3 +1199,16 @@ input[type="text"]:disabled,
 input[type="password"]:disabled {
     background: #cbcbcb
 }
+
+.row-narrow{
+    line-height:0.8em;
+}
+
+.text-smaller{
+    font-size: 0.8em;
+}
+
+.text-smaller-lmargin{
+    margin-left: 20px;
+    font-size: 0.8em;
+}

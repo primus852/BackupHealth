@@ -40,6 +40,14 @@ switch ($endpoint) {
         $bh = new BackupHealth();
         $bh->mysql_status($request['id']);
         break;
+    case 'benchmarkMySql':
+        $bh = new BackupHealth();
+        $bh->mysql_benchmark($request['id']);
+        break;
+    case 'statusSite':
+        $bh = new BackupHealth();
+        $bh->get_status_code($request['id']);
+        break;
     default:
         return new JsonResponse(array(
             'result' => 'error',

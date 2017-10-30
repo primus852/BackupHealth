@@ -18,9 +18,14 @@ PoC for the project. Let's see where this is going.
 
 **ToDo / Wishlist**
 
-- check db connection after (before?) adding it
+- ~~check db connection after (before?) adding it~~
 - make MySQL entries editable
-- add a `ping` Test
+- ~~add a `ping` Test~~
 - (Customizable) MySQL Benchmark Tests
 - Backup MySQL
 - Backup (S)FTP folders
+- entries editable/deletable immediately after adding
+
+**Bugs**
+
+- Adding an item to a table is sometimes not in correct order...

@@ -59,23 +59,30 @@ require_once 'includes/header.inc';
                                         <?php if ($pings !== null) { ?>
                                             <?php foreach ($pings as $ping) { ?>
                                                 <div class="row">
-                                                    <div class="col-7">
+                                                    <div class="col-9 loadStart"
+                                                         data-endpoint="pingSite"
+                                                         data-action="ping"
+                                                         data-id="<?php echo $ping['id']; ?>"
+                                                    >
                                                         <?php echo $ping['url']; ?>
                                                     </div>
-                                                    <div class="col-3 result-ping-<?php echo $ping['id']; ?>">
-
-                                                    </div>
-                                                    <div class="col-2 text-center">
-                                                        <a href="/ajax/requests.php" data-endpoint="pingSite" class="btn btn-success btn-sm loadStart" data-action="ping" data-id="<?php echo $ping['id']; ?>">
-                                                            <i class="fa fa-refresh"></i>
-                                                        </a>
-                                                    </div>
+                                                    <div class="col-3 text-right result-ping-<?php echo $ping['id']; ?>"></div>
                                                 </div>
-                                                <br />
+                                                <div class="row row-narrow">
+                                                    <div class="col-9 loadStart"
+                                                         data-endpoint="statusSite"
+                                                         data-action="status"
+                                                         data-id="<?php echo $ping['id']; ?>"
+                                                    >
+                                                        <span class="text-smaller-lmargin">Status</span>
+                                                    </div>
+                                                    <div class="col-3 text-right result-status-<?php echo $ping['id']; ?>"></div>
+                                                </div>
+                                                <br/>
                                             <?php } ?>
                                         <?php } else { ?>
                                             No Ping Test, please add them here <a href="/settingsProjects.php#details-project-<?php echo $project['id']; ?>">here</a>
-                                            <br />
+                                            <br/>
                                         <?php } ?>
                                         <!-- MySQL -->
                                         <div class="row">
@@ -87,23 +94,40 @@ require_once 'includes/header.inc';
                                         <?php if ($mysqls !== null) { ?>
                                             <?php foreach ($mysqls as $mysql) { ?>
                                                 <div class="row">
-                                                    <div class="col-7">
+                                                    <div class="col-9 loadStart"
+                                                         data-endpoint="pingMySql"
+                                                         data-action="mysql-connect"
+                                                         data-id="<?php echo $mysql['id']; ?>"
+                                                    >
                                                         <?php echo $mysql['db']; ?>
                                                     </div>
-                                                    <div class="col-3 result-mysql-connect-<?php echo $mysql['id']; ?>">
-
+                                                    <div class="col-3 text-right result-mysql-connect-<?php echo $mysql['id']; ?>"></div>
+                                                </div>
+                                                <div class="row row-narrow">
+                                                    <div class="col-9">
+                                                        <span class="text-smaller-lmargin">Version</span>
                                                     </div>
-                                                    <div class="col-2 text-center">
-                                                        <a href="/ajax/requests.php" data-endpoint="pingMySql" class="btn btn-success btn-sm loadStart" data-action="mysql-connect" data-id="<?php echo $mysql['id']; ?>">
-                                                            <i class="fa fa-refresh"></i>
-                                                        </a>
+                                                    <div class="col-3 text-right">
+                                                        <span class="text-smaller result-mysql-version-<?php echo $mysql['id']; ?>"><i class="fa fa-spin fa-spinner"></i></span>
                                                     </div>
                                                 </div>
-                                                <br />
+                                                <div class="row row-narrow">
+                                                    <div class="col-9 loadStart"
+                                                         data-endpoint="benchmarkMySql"
+                                                         data-action="mysql-benchmark"
+                                                         data-id="<?php echo $mysql['id']; ?>"
+                                                    >
+                                                        <span class="text-smaller-lmargin">Benchmark <i class="fa fa-info-circle tt" title="SELECT BENCHMARK(100000,ENCODE(RAND(),RAND()));"></i> </span>
+                                                    </div>
+                                                    <div class="col-3 text-right">
+                                                        <span class="text-smaller result-mysql-benchmark-<?php echo $mysql['id']; ?>"><i class="fa fa-spin fa-spinner"></i></span>
+                                                    </div>
+                                                </div>
+                                                <br/>
                                             <?php } ?>
                                         <?php } else { ?>
                                             No MySql DBs found, please add them here <a href="/settingsProjects.php#details-project-<?php echo $project['id']; ?>">here</a>
-                                            <br />
+                                            <br/>
                                         <?php } ?>
                                     </div>
                                 </div>

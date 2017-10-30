@@ -34,4 +34,10 @@ class Config
     const PING_GOOD_BELOW = 50; //green below X ms
     const PING_AVG_MAX = 120; //yellow up to X ms
 
+    /* ---- MySQL Benchmark Command ---- */
+    const BM_GOOD_BELOW = 1000; //green below X ms
+    const BM_AVG_MAX = 2500; //yellow up to X ms
+
+    /* ---- cURL Settings ---- */
+    const CURL_TIMEOUT = 10; //in seconds
 }

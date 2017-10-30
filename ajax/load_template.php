@@ -41,6 +41,12 @@ switch ($template) {
             'id' => $request['id'],
         );
         break;
+    case 'add_sftp':
+        $params = array(
+            'sc' => new SimpleCrypt(),
+            'id' => $request['id'],
+        );
+        break;
     case 'edit_project':
         $data = $bh->query_by_id('app_projects', $request['id']);
         $params = array(
